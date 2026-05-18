@@ -5,11 +5,19 @@ def softmax(x):
     e_x = np.exp(x - x.max(axis=1, keepdims=True))  # numerically stable exp
     return e_x / e_x.sum(axis=1, keepdims=True)      # normalise each row
 
+def forward(raw_image):
+    img = np.array(raw_image).reshape(1, 64)
+    x_norm = (img - x_mean) / x_std
+    layer1 = np.maximum(0, x_norm @ W1 + b1)
+    probs = softmax(layer1 @ W2 + b2)
+    return layer1, probs
+
 # x: input features (1797 samples, 64 pixels each)
 # y: digit labels 0–9 (1797,)
 x, y = load_digits(return_X_y=True)
 
-x = (x - x.mean()) / x.std()  # normalise for stable gradient descent (1797, 64)
+x_mean, x_std = x.mean(), x.std()
+x = (x - x_mean) / x_std  # normalise for stable gradient descent (1797, 64)
 targets = np.eye(10)[y]        # one-hot encode labels (1797, 10)
 
 # Network: 64 -> 32 -> 10
