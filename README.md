@@ -26,7 +26,7 @@ Input (64)  →  Hidden ReLU (32)  →  Output Softmax (10)
 
 ## Key Implementation Details
 
-- **Numerically stable softmax** — subtracts `x.max()` before `exp` to prevent overflow.
+- **Numerically stable softmax** — subtracts `x.max(axis=1)` (per-row max) before `exp` to prevent overflow.
 - **Cross-entropy gradient** — `(predictions - targets) / N` gives the combined loss gradient directly.
 - **ReLU gate** — `layer1 > 0` masks the backpropagated error, zeroing gradients where the hidden unit was inactive.
 - **Weight initialisation** — `randn * 0.1` keeps initial activations in a sensible range; biases start at zero.
@@ -63,7 +63,7 @@ Expected output:
 Epoch    0 | Acc: 10%
 Epoch  100 | Acc: 72%
 ...
-Epoch  900 | Acc: ~99%
+Epoch  900 | Acc: 99%
 ```
 
 ## License
