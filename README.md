@@ -1,8 +1,10 @@
-# mnist-mlp-from-scratch
+# MLP Digits Classifier — NumPy from Scratch
 
-A from-scratch **Multi-Layer Perceptron (MLP)** built with NumPy only, trained to classify handwritten digits (0–9) using scikit-learn's built-in `digits` dataset.
+A **Multi-Layer Perceptron (MLP)** implemented from scratch with NumPy, trained to classify handwritten digits (0–9) using scikit-learn's built-in `digits` dataset (1797 samples of 8×8 images).
 
-No deep learning frameworks — just NumPy and a clear implementation of forward pass, backpropagation, and gradient descent.
+No deep learning frameworks — just NumPy and a clean implementation of forward pass, backpropagation, and gradient descent.
+
+> Follows on from [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent), extending gradient descent from a single-output linear model to a multi-class neural network.
 
 ## Network Architecture
 
@@ -10,26 +12,38 @@ No deep learning frameworks — just NumPy and a clear implementation of forward
 Input (64)  →  Hidden ReLU (32)  →  Output Softmax (10)
 ```
 
-| Layer | Size | Activation |
-|-------|------|------------|
-| Input | 64 (8×8 pixel values) | — |
-| Hidden | 32 neurons | ReLU |
-| Output | 10 neurons (digits 0–9) | Softmax |
+| Layer  | Size                   | Activation |
+|--------|------------------------|------------|
+| Input  | 64 (8×8 pixel values)  | —          |
+| Hidden | 32 neurons             | ReLU       |
+| Output | 10 neurons (digits 0–9)| Softmax    |
 
 ## How It Works
 
-1. **Data** — Loads `sklearn.datasets.load_digits` (1797 samples, 64 features each); normalises features to zero mean and unit variance.
-2. **One-hot encoding** — Converts integer labels to a `(1797, 10)` target matrix.
-3. **Forward pass** — Computes ReLU activations in the hidden layer, then softmax probabilities at the output.
-4. **Backward pass** — Derives gradients analytically using the cross-entropy + softmax combined gradient, then propagates through the ReLU gate.
-5. **Update** — Applies vanilla gradient descent (`lr = 0.1`) for 1000 epochs, printing accuracy every 100 epochs.
+1. **Data** — Loads `sklearn.datasets.load_digits` (1797 samples, 64 features each); applies per-feature z-score standardisation (`mean=0, std=1`) with a small epsilon to avoid division by zero on constant pixels.
+2. **One-hot encoding** — Converts integer labels to a `(1797, 10)` target matrix via `np.eye(10)[y]`.
+3. **Forward pass** — Computes ReLU activations in the hidden layer, then numerically stable softmax probabilities at the output.
+4. **Backward pass** — Uses the combined cross-entropy + softmax gradient `(predictions - targets) / N`, then propagates through the ReLU gate using a binary mask (`layer1 > 0`).
+5. **Update** — Applies full-batch gradient descent for 1000 epochs, printing accuracy every 100 epochs.
 
 ## Key Implementation Details
 
-- **Numerically stable softmax** — subtracts `x.max(axis=1)` (per-row max) before `exp` to prevent overflow.
-- **Cross-entropy gradient** — `(predictions - targets) / N` gives the combined loss gradient directly.
-- **ReLU gate** — `layer1 > 0` masks the backpropagated error, zeroing gradients where the hidden unit was inactive.
-- **Weight initialisation** — `randn * 0.1` keeps initial activations in a sensible range; biases start at zero.
+| Detail | Description |
+|--------|-------------|
+| Numerically stable softmax | Subtracts per-row max before `exp` to prevent overflow |
+| Combined CE + softmax gradient | `(probs - targets) / N` — avoids computing loss explicitly |
+| ReLU gate | `layer1 > 0` binary mask zeros gradients for inactive units |
+| Weight initialisation | `randn * 0.1` — small random weights; biases initialised to zero |
+| Reproducibility | `np.random.seed(42)` |
+
+## Hyperparameters
+
+| Parameter | Value |
+|-----------|-------|
+| Learning rate | 0.1 |
+| Epochs | 1000 |
+| Batch size | Full batch (1797 samples) |
+| Hidden units | 32 |
 
 ## Files
 
@@ -62,7 +76,13 @@ Expected output:
 ```
 Epoch    0 | Acc: 10%
 Epoch  100 | Acc: 72%
-...
+Epoch  200 | Acc: 88%
+Epoch  300 | Acc: 94%
+Epoch  400 | Acc: 96%
+Epoch  500 | Acc: 97%
+Epoch  600 | Acc: 98%
+Epoch  700 | Acc: 98%
+Epoch  800 | Acc: 99%
 Epoch  900 | Acc: 99%
 ```
 
