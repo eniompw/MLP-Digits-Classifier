@@ -1,4 +1,4 @@
-# np-mlp-digits
+# mnist-mlp-from-scratch
 
 A from-scratch **Multi-Layer Perceptron (MLP)** built with NumPy only, trained to classify handwritten digits (0–9) using scikit-learn's built-in `digits` dataset.
 
