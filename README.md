@@ -69,6 +69,7 @@ Input (64)  →  Hidden ReLU (32)  →  Output Softmax (10)
 | `np_mlp_digits.py` | Clean Python script — full training loop |
 | `np_mlp_digits.ipynb` | Jupyter Notebook version with cell-by-cell walkthrough |
 | `np_slp_digits.py` | Even simpler single-layer (no hidden layer) softmax classifier |
+| `np_slp_digits.ipynb` | Jupyter Notebook version of the single-layer classifier |
 
 ## Requirements
 
