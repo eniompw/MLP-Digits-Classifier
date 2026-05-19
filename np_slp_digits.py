@@ -20,4 +20,5 @@ for epoch in range(1000):
     W -= lr * x.T @ error                    # update weights
     b -= lr * error.sum(0, keepdims=True)    # update biases
     if epoch % 100 == 0:
-        print(epoch, f"{np.mean(probs.argmax(1) == y):.0%}")
+        acc = np.mean(probs.argmax(1) == y)
+        print(f"Epoch {epoch:4d} | Acc: {acc:.1%}")
