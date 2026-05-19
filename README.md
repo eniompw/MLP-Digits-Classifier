@@ -6,17 +6,34 @@ No deep learning frameworks — just NumPy and a clean implementation of forward
 
 > Follows on from [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent), extending gradient descent from a single-output linear model to a multi-class neural network.
 
-## Network Architecture
+## Network Architectures
+
+### Single-Layer Perceptron (SLP)
+
+A minimal baseline — one linear mapping from pixels to class logits. See `np_slp_digits.py`.
+
+```
+Input (64)  →  Output Softmax (10)
+```
+
+| Layer  | Size                    | Activation |
+|--------|-------------------------|------------|
+| Input  | 64 (8×8 pixel values)   | —          |
+| Output | 10 neurons (digits 0–9) | Softmax    |
+
+### Multi-Layer Perceptron (MLP)
+
+Adds a hidden ReLU layer, enabling the network to learn non-linear features.
 
 ```
 Input (64)  →  Hidden ReLU (32)  →  Output Softmax (10)
 ```
 
-| Layer  | Size                   | Activation |
-|--------|------------------------|------------|
-| Input  | 64 (8×8 pixel values)  | —          |
-| Hidden | 32 neurons             | ReLU       |
-| Output | 10 neurons (digits 0–9)| Softmax    |
+| Layer  | Size                    | Activation |
+|--------|-------------------------|------------|
+| Input  | 64 (8×8 pixel values)   | —          |
+| Hidden | 32 neurons              | ReLU       |
+| Output | 10 neurons (digits 0–9) | Softmax    |
 
 ## How It Works
 
@@ -51,6 +68,7 @@ Input (64)  →  Hidden ReLU (32)  →  Output Softmax (10)
 |------|-------------|
 | `np_mlp_digits.py` | Clean Python script — full training loop |
 | `np_mlp_digits.ipynb` | Jupyter Notebook version with cell-by-cell walkthrough |
+| `np_slp_digits.py` | Even simpler single-layer (no hidden layer) softmax classifier |
 
 ## Requirements
 
@@ -68,23 +86,22 @@ pip install numpy scikit-learn
 ## Usage
 
 ```bash
-python np_mlp_digits.py
+python np_slp_digits.py   # single-layer
+python np_mlp_digits.py   # multi-layer
 ```
 
-Expected output:
-
-```
-Epoch    0 | Acc: 10%
-Epoch  100 | Acc: 72%
-Epoch  200 | Acc: 88%
-Epoch  300 | Acc: 94%
-Epoch  400 | Acc: 96%
-Epoch  500 | Acc: 97%
-Epoch  600 | Acc: 98%
-Epoch  700 | Acc: 98%
-Epoch  800 | Acc: 99%
-Epoch  900 | Acc: 99%
-```
+| Epoch | SLP (`np_slp_digits.py`) | MLP (`np_mlp_digits.py`) |
+|-------|--------------------------|--------------------------|
+| 0     | 13%                      | 10%                      |
+| 100   | 94%                      | 72%                      |
+| 200   | 96%                      | 88%                      |
+| 300   | 97%                      | 94%                      |
+| 400   | 97%                      | 96%                      |
+| 500   | 98%                      | 97%                      |
+| 600   | 98%                      | 98%                      |
+| 700   | 98%                      | 98%                      |
+| 800   | 98%                      | 99%                      |
+| 900   | 98%                      | 99%                      |
 
 ## License
 
