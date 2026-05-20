@@ -2,15 +2,15 @@ from sklearn.datasets import load_digits
 import numpy as np
 
 def softmax(x):
-    exp_x = np.exp(x - x.max(axis=1, keepdims=True))   # subtract max for numerical stability
+    exp_x = np.exp(x - x.max(axis=1, keepdims=True))    # subtract max for numerical stability
     return exp_x / exp_x.sum(axis=1, keepdims=True)
 
 X, y = load_digits(return_X_y=True)
-X = (X - X.mean()) / (X.std())                         # standardize each input feature (pixel)
-y_one_hot = np.eye(10)[y]                              # one-hot encode labels
+X = (X - X.mean()) / (X.std())                          # standardize each input feature (pixel)
+y_one_hot = np.eye(10)[y]                               # one-hot encode labels
 
 np.random.seed(42)
-W = np.random.randn(64, 10) * 0.1                      # weights: 64 inputs → 10 classes
+W = np.random.randn(64, 10) * 0.1                       # weights: 64 inputs → 10 classes
 b = np.zeros((1, 10))
 learning_rate = 0.1
 
