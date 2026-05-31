@@ -5,6 +5,8 @@ A **Multi-Layer Perceptron (MLP)** implemented from scratch with NumPy, trained 
 No deep learning frameworks — just NumPy and a clean implementation of forward pass, backpropagation, and gradient descent.
 
 > Follows on from [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent), extending gradient descent from a single-output linear model to a multi-class neural network.
+>
+> This series continues with [TinyLM](https://github.com/eniompw/TinyLM), where the SLP and MLP are applied to text.
 
 ## Network Architectures
 
