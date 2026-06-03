@@ -1,12 +1,23 @@
-# MLP Digits Classifier — NumPy from Scratch
+# MLP Digits Classifier — NumPy and PyTorch
 
 A **Multi-Layer Perceptron (MLP)** implemented from scratch with NumPy, trained to classify handwritten digits (0–9) using scikit-learn's built-in `digits` dataset (1797 samples of 8×8 images).
 
-No deep learning frameworks — just NumPy and a clean implementation of forward pass, backpropagation, and gradient descent.
+Includes NumPy-from-scratch implementations and a minimal PyTorch single-layer baseline.
 
 > Follows on from [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent), extending gradient descent from a single-output linear model to a multi-class neural network.
 >
 > This series continues with [TinyLM](https://github.com/eniompw/TinyLM), where the SLP and MLP are applied to text.
+
+## Contents
+
+- [Network Architectures](#network-architectures)
+- [How It Works](#how-it-works)
+- [Key Implementation Details](#key-implementation-details)
+- [Hyperparameters](#hyperparameters)
+- [Files](#files)
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [License](#license)
 
 ## Network Architectures
 
@@ -72,18 +83,21 @@ Input (64)  →  Hidden ReLU (32)  →  Output Softmax (10)
 | `np_mlp_digits.ipynb` | Jupyter Notebook version with cell-by-cell walkthrough |
 | `np_slp_digits.py` | Even simpler single-layer (no hidden layer) softmax classifier |
 | `np_slp_digits.ipynb` | Jupyter Notebook version of the single-layer classifier |
+| `np_slp_digits_explainer.md` | Step-by-step explainer for the NumPy single-layer classifier |
+| `torch_slp_digits.py` | PyTorch single-layer softmax classifier with manual gradient updates |
 
 ## Requirements
 
 ```
 numpy
 scikit-learn
+torch
 ```
 
 Install with:
 
 ```bash
-pip install numpy scikit-learn
+pip install numpy scikit-learn torch
 ```
 
 ## Usage
@@ -91,6 +105,7 @@ pip install numpy scikit-learn
 ```bash
 python np_slp_digits.py   # single-layer
 python np_mlp_digits.py   # multi-layer
+python torch_slp_digits.py  # single-layer (PyTorch)
 ```
 
 | Epoch | SLP (`np_slp_digits.py`) | MLP (`np_mlp_digits.py`) |
