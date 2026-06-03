@@ -2,7 +2,7 @@
 
 A **Multi-Layer Perceptron (MLP)** implemented from scratch with NumPy, trained to classify handwritten digits (0–9) using scikit-learn's built-in `digits` dataset (1797 samples of 8×8 images).
 
-Includes NumPy-from-scratch implementations and a minimal PyTorch single-layer baseline.
+Includes NumPy-from-scratch implementations, a minimal PyTorch single-layer baseline, and step-by-step explainers for the SLP scripts.
 
 > Follows on from [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent), extending gradient descent from a single-output linear model to a multi-class neural network.
 >
@@ -84,6 +84,7 @@ Input (64)  →  Hidden ReLU (32)  →  Output Softmax (10)
 | `np_slp_digits.py` | Even simpler single-layer (no hidden layer) softmax classifier |
 | `np_slp_digits.ipynb` | Jupyter Notebook version of the single-layer classifier |
 | `np_slp_digits_explainer.md` | Step-by-step explainer for the NumPy single-layer classifier |
+| `torch_slp_digits_explainer.md` | Step-by-step explainer for the PyTorch single-layer classifier |
 | `torch_slp_digits.py` | PyTorch single-layer softmax classifier with manual gradient updates |
 
 ## Requirements
