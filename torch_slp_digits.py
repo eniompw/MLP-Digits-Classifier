@@ -4,7 +4,6 @@ import torch                                                                    
 # Automatically create all tensors on GPU if available, removing manual device boilerplate
 torch.set_default_device('cuda' if torch.cuda.is_available() else 'cpu')                # leverage CUDA if present
 
-
 # --- Data ---
 X, y = load_digits(return_X_y=True)                                                     # load 8x8 handwritten digit dataset (1797 samples)
 X = torch.tensor(X, dtype=torch.float32)                                                # convert inputs to float32 tensors
