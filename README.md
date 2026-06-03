@@ -86,6 +86,7 @@ Input (64)  →  Hidden ReLU (32)  →  Output Softmax (10)
 | `np_slp_digits_explainer.md` | Step-by-step explainer for the NumPy single-layer classifier |
 | `torch_slp_digits_explainer.md` | Step-by-step explainer for the PyTorch single-layer classifier |
 | `torch_slp_digits.py` | PyTorch single-layer softmax classifier with manual gradient updates |
+| `torch_slp_autograd.py` | PyTorch single-layer classifier using builtin softmax and autograd |
 
 ## Requirements
 
@@ -104,9 +105,10 @@ pip install numpy scikit-learn torch
 ## Usage
 
 ```bash
-python np_slp_digits.py   # single-layer
-python np_mlp_digits.py   # multi-layer
-python torch_slp_digits.py  # single-layer (PyTorch)
+python np_slp_digits.py       # single-layer (NumPy)
+python np_mlp_digits.py       # multi-layer (NumPy)
+python torch_slp_digits.py    # single-layer (PyTorch, manual gradients)
+python torch_slp_autograd.py  # single-layer (PyTorch, autograd)
 ```
 
 | Epoch | SLP (`np_slp_digits.py`) | MLP (`np_mlp_digits.py`) |
