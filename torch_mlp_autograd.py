@@ -19,17 +19,14 @@ b2 = torch.zeros(1, 10, requires_grad=True)                                # out
 lr = 0.1                                                                    # scaling factor for gradient updates
 
 # --- Train ---
+params = [W1, b1, W2, b2]                                                  # collect all parameters for concise update loop
 for epoch in range(1000):                                                   # train for 1000 epochs (full batch iterations)
-    hidden = F.relu(X @ W1 + b1)                                            # ReLU hidden layer: 64 -> 32
-    logits = hidden @ W2 + b2                                               # unnormalized log probabilities (logits): 32 -> 10
+    logits = F.relu(X @ W1 + b1) @ W2 + b2                                 # forward pass: ReLU hidden layer (64->32) then logits (32->10)
     loss = F.cross_entropy(logits, y)                                       # cross-entropy loss (numerically stable log-softmax + NLL)
     loss.backward()                                                         # autograd: compute all gradients automatically
 
     with torch.no_grad():                                                   # disable grad tracking during parameter update
-        W1 -= lr * W1.grad; W1.grad.zero_()                                 # gradient descent + clear gradients for W1
-        b1 -= lr * b1.grad; b1.grad.zero_()                                 # gradient descent + clear gradients for b1
-        W2 -= lr * W2.grad; W2.grad.zero_()                                 # gradient descent + clear gradients for W2
-        b2 -= lr * b2.grad; b2.grad.zero_()                                 # gradient descent + clear gradients for b2
+        for p in params: p -= lr * p.grad; p.grad.zero_()                  # gradient descent + clear gradients for all parameters
 
     if epoch % 100 == 0:                                                    # evaluate and report progress every 100 epochs
         acc = (logits.argmax(1) == y).float().mean()                        # compute percentage of correctly predicted digits
