@@ -1,8 +1,8 @@
 # MLP Digits Classifier — NumPy and PyTorch
 
-A **Multi-Layer Perceptron (MLP)** implemented from scratch with NumPy, trained to classify handwritten digits (0–9) using scikit-learn's built-in `digits` dataset (1797 samples of 8×8 images).
+A hands-on introduction to neural networks built from scratch — covering both a **Single-Layer Perceptron (SLP)** and a **Multi-Layer Perceptron (MLP)** implemented in NumPy and PyTorch, trained to classify handwritten digits (0–9) using scikit-learn's built-in `digits` dataset (1797 samples of 8×8 images).
 
-Includes NumPy-from-scratch implementations, a minimal PyTorch single-layer baseline, and step-by-step explainers for the SLP scripts.
+Includes NumPy scratch implementations, equivalent PyTorch versions (manual gradients and autograd), and step-by-step explainers.
 
 > Follows on from [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent), extending gradient descent from a single-output linear model to a multi-class neural network.
 >
@@ -114,7 +114,7 @@ python torch_mlp_autograd.py  # multi-layer (PyTorch, autograd)
 ```
 
 | Epoch | SLP (`np_slp_digits.py`) | MLP (`np_mlp_digits.py`) |
-|-------|--------------------------|--------------------------|
+|-------|--------------------------|--------------------------| 
 | 0     | 13%                      | 10%                      |
 | 100   | 94%                      | 72%                      |
 | 200   | 96%                      | 88%                      |
