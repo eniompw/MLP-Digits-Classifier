@@ -10,14 +10,28 @@ Includes NumPy-from-scratch implementations, a minimal PyTorch single-layer base
 
 ## Contents
 
+- [Files](#files)
 - [Network Architectures](#network-architectures)
 - [How It Works](#how-it-works)
 - [Key Implementation Details](#key-implementation-details)
 - [Hyperparameters](#hyperparameters)
-- [Files](#files)
 - [Requirements](#requirements)
 - [Usage](#usage)
 - [License](#license)
+
+## Files
+
+| File | Description |
+|------|-------------|
+| `np_slp_digits.py` | NumPy single-layer (no hidden layer) softmax classifier |
+| `np_slp_digits.ipynb` | Jupyter Notebook version of the single-layer classifier |
+| `np_slp_digits_explainer.md` | Step-by-step explainer for the NumPy single-layer classifier |
+| `np_mlp_digits.py` | NumPy MLP — clean Python script with full training loop |
+| `np_mlp_digits.ipynb` | Jupyter Notebook version with cell-by-cell walkthrough |
+| `torch_slp_digits.py` | PyTorch single-layer softmax classifier with manual gradient updates |
+| `torch_slp_autograd.py` | PyTorch single-layer classifier using builtin softmax and autograd |
+| `torch_slp_digits_explainer.md` | Step-by-step explainer for the PyTorch single-layer classifier |
+| `torch_mlp_autograd.py` | PyTorch MLP classifier using autograd |
 
 ## Network Architectures
 
@@ -75,19 +89,6 @@ Input (64)  →  Hidden ReLU (32)  →  Output Softmax (10)
 | Batch size | Full batch (1797 samples) |
 | Hidden units | 32 |
 
-## Files
-
-| File | Description |
-|------|-------------|
-| `np_mlp_digits.py` | Clean Python script — full training loop |
-| `np_mlp_digits.ipynb` | Jupyter Notebook version with cell-by-cell walkthrough |
-| `np_slp_digits.py` | Even simpler single-layer (no hidden layer) softmax classifier |
-| `np_slp_digits.ipynb` | Jupyter Notebook version of the single-layer classifier |
-| `np_slp_digits_explainer.md` | Step-by-step explainer for the NumPy single-layer classifier |
-| `torch_slp_digits_explainer.md` | Step-by-step explainer for the PyTorch single-layer classifier |
-| `torch_slp_digits.py` | PyTorch single-layer softmax classifier with manual gradient updates |
-| `torch_slp_autograd.py` | PyTorch single-layer classifier using builtin softmax and autograd |
-
 ## Requirements
 
 ```
@@ -109,10 +110,11 @@ python np_slp_digits.py       # single-layer (NumPy)
 python np_mlp_digits.py       # multi-layer (NumPy)
 python torch_slp_digits.py    # single-layer (PyTorch, manual gradients)
 python torch_slp_autograd.py  # single-layer (PyTorch, autograd)
+python torch_mlp_autograd.py  # multi-layer (PyTorch, autograd)
 ```
 
 | Epoch | SLP (`np_slp_digits.py`) | MLP (`np_mlp_digits.py`) |
-|-------|--------------------------|--------------------------|
+|-------|--------------------------|--------------------------| 
 | 0     | 13%                      | 10%                      |
 | 100   | 94%                      | 72%                      |
 | 200   | 96%                      | 88%                      |
