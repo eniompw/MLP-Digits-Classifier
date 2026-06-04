@@ -12,7 +12,11 @@ y = torch.tensor(y, dtype=torch.long)                                      # con
 
 # --- Model ---
 torch.manual_seed(42)                                                       # seed random number generator for reproducibility
-model = nn.Sequential(nn.Linear(64, 32), nn.ReLU(), nn.Linear(32, 10))    # two-layer MLP: 64->32 (ReLU) -> 10 logits
+model = nn.Sequential(                                                      # two-layer MLP: 64 inputs -> 32 hidden -> 10 class logits
+    nn.Linear(64, 32),                                                      # hidden layer: 64 inputs to 32 units
+    nn.ReLU(),                                                              # non-linear activation between layers
+    nn.Linear(32, 10),                                                      # output layer: 32 hidden units to 10 classes
+)
 lr = 0.1                                                                    # scaling factor for gradient updates
 
 # --- Train ---
