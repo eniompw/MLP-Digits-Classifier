@@ -32,6 +32,8 @@ Includes NumPy scratch implementations, equivalent PyTorch versions (manual grad
 | `np_mlp_digits.py` | NumPy MLP — clean Python script with full training loop |
 | `np_mlp_digits.ipynb` | Jupyter Notebook version with cell-by-cell walkthrough |
 | `torch_mlp_autograd.py` | PyTorch MLP classifier using autograd |
+| `torch_mlp_sequential.py` | PyTorch MLP classifier using `nn.Sequential` |
+| `CODE_WALKTHROUGH.md` | Detailed code walkthrough covering all implementations |
 
 ## Network Architectures
 
@@ -106,11 +108,12 @@ pip install numpy scikit-learn torch
 ## Usage
 
 ```bash
-python np_slp_digits.py       # single-layer (NumPy)
-python torch_slp_digits.py    # single-layer (PyTorch, manual gradients)
-python torch_slp_autograd.py  # single-layer (PyTorch, autograd)
-python np_mlp_digits.py       # multi-layer (NumPy)
-python torch_mlp_autograd.py  # multi-layer (PyTorch, autograd)
+python np_slp_digits.py          # single-layer (NumPy)
+python torch_slp_digits.py       # single-layer (PyTorch, manual gradients)
+python torch_slp_autograd.py     # single-layer (PyTorch, autograd)
+python np_mlp_digits.py          # multi-layer (NumPy)
+python torch_mlp_autograd.py     # multi-layer (PyTorch, autograd)
+python torch_mlp_sequential.py   # multi-layer (PyTorch, nn.Sequential)
 ```
 
 | Epoch | SLP (`np_slp_digits.py`) | MLP (`np_mlp_digits.py`) |
