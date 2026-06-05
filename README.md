@@ -4,6 +4,14 @@ Builds a digits classifier step by step — starting from a single linear layer 
 
 Uses scikit-learn's built-in `digits` dataset (1797 samples of 8×8 handwritten digits, 0–9). Each step includes a Python script, and the NumPy versions also have a Jupyter Notebook and a line-by-line explainer.
 
+## Related Repos
+
+> Part of a series: [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent) → **MLP Digits Classifier** → [TinyLM](https://github.com/eniompw/TinyLM)
+>
+> Follows on from [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent), extending gradient descent from a single-output linear model to a multi-class neural network. The [np_slp_digits.py](np_slp_digits.py) implementation builds directly on [linreg_ames.py](https://github.com/eniompw/LinearRegressionGD/blob/main/linreg_ames.py), extending the same gradient descent framework from continuous targets in linear regression to categorical targets in multi-class classification.
+>
+> This series continues with [TinyLM](https://github.com/eniompw/TinyLM), where the SLP and MLP are applied to text.
+
 ## Contents
 
 - [Files](#files)
@@ -13,7 +21,6 @@ Uses scikit-learn's built-in `digits` dataset (1797 samples of 8×8 handwritten 
 - [Hyperparameters](#hyperparameters)
 - [Usage](#usage)
 - [Requirements](#requirements)
-- [Related Repos](#related-repos)
 - [License](#license)
 
 ## Files
@@ -155,14 +162,6 @@ Install with:
 ```bash
 pip install numpy scikit-learn torch
 ```
-
-## Related Repos
-
-> Follows on from [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent), extending gradient descent from a single-output linear model to a multi-class neural network.
->
-> The [np_slp_digits.py](np_slp_digits.py) implementation builds directly on [linreg_ames.py](https://github.com/eniompw/LinearRegressionGD/blob/main/linreg_ames.py), extending the same gradient descent framework from continuous targets in linear regression to categorical targets in multi-class classification.
->
-> This series continues with [TinyLM](https://github.com/eniompw/TinyLM), where the SLP and MLP are applied to text.
 
 ## License
 
