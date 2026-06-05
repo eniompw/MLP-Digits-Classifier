@@ -12,6 +12,46 @@ Jupyter notebooks mirror the NumPy scripts for an interactive, pedagogical versi
 
 ---
 
+## What Changes at Each Step
+
+### `np_slp_digits.py` → `np_mlp_digits.py`
+
+The main change is adding a hidden layer with ReLU activation to form a true MLP. Alongside the architectural change, preprocessing is upgraded from global normalisation (a single mean/std across all pixels) to per-feature z-score standardisation with a small epsilon (`1e-8`) to avoid division by zero on constant pixels. The backward pass is extended to propagate gradients through the ReLU gate using a binary mask (`layer1 > 0`).
+
+### `np_slp_digits.py` → `torch_slp_digits.py`
+
+The main shift is replacing NumPy arrays and operations with PyTorch tensors and tensor operations. The PyTorch version uses the built-in `torch.softmax`, so there is no need to implement a custom numerically stable softmax by hand. Most of the training workflow remains the same — initialize weights, forward pass, compute probabilities, calculate gradients, update parameters — but gradients now come from `loss.backward()` rather than hand-coded expressions.
+
+### `torch_slp_digits.py` → `torch_slp_autograd.py`
+
+The main change is replacing explicit weight tensors and hand-written gradient updates with PyTorch autograd, `nn.Module`, and an optimizer. In the manual version, gradient expressions and update steps are written explicitly under `torch.no_grad()`. In the autograd version, PyTorch builds the computation graph during the forward pass and computes gradients automatically. The training loop collapses to the canonical pattern:
+
+```python
+optimizer.zero_grad()
+loss.backward()
+optimizer.step()
+```
+
+The model objective and overall structure remain the same, but the autograd version is shorter, less error-prone, and easier to extend.
+
+### `torch_slp_autograd.py` → `torch_mlp_autograd.py`
+
+The key architectural change is adding a hidden layer to form an MLP. Parameter updates are applied in a loop over all learnable tensors rather than updating each one individually:
+
+```python
+for p in params:
+    p -= lr * p.grad
+    p.grad.zero_()
+```
+
+This keeps the training step concise and scales naturally as more layers are added. A similar loop-style update is also visible in `np_mlp_digits.py`.
+
+### `torch_mlp_autograd.py` → `torch_mlp_sequential.py`
+
+The main change is replacing manual parameter declarations (`W1`, `b1`, `W2`, `b2`) with `nn.Linear` layer modules and composing them with `nn.Sequential`. Instead of explicitly managing each weight and bias tensor, the Sequential version defines the network architecture declaratively, with PyTorch handling parameter registration. The training goal remains the same, but the model definition becomes cleaner and more idiomatic for larger PyTorch projects.
+
+---
+
 ## 1. NumPy SLP: `np_slp_digits.py`
 
 **Goal:** Show that a single linear layer with softmax is enough to get a decent classifier on `sklearn`'s digits dataset, implemented from scratch with full-batch gradient descent.
