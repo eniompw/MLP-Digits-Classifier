@@ -13,6 +13,7 @@ Includes NumPy scratch implementations, equivalent PyTorch versions (manual grad
 ## Contents
 
 - [Files](#files)
+- [Implementation Changes](#implementation-changes)
 - [Network Architectures](#network-architectures)
 - [How It Works](#how-it-works)
 - [Key Implementation Details](#key-implementation-details)
@@ -36,6 +37,46 @@ Includes NumPy scratch implementations, equivalent PyTorch versions (manual grad
 | [torch_mlp_autograd.py](torch_mlp_autograd.py) | PyTorch MLP classifier using autograd |
 | [torch_mlp_sequential.py](torch_mlp_sequential.py) | PyTorch MLP classifier using `nn.Sequential` |
 | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) | Detailed code walkthrough covering all implementations |
+
+## Implementation Changes
+
+### Going from `np_slp_digits.py` to `torch_slp_digits.py`
+
+Moving from [np_slp_digits.py](np_slp_digits.py) to [torch_slp_digits.py](torch_slp_digits.py), the main shift is replacing NumPy arrays and operations with PyTorch tensors and tensor operations.
+
+The PyTorch version uses the built-in softmax operation, so there is no need to implement a custom numerically stable softmax function by hand.
+
+Most of the learning workflow remains similar: initialize weights, run a forward pass, compute multi-class probabilities, calculate gradients, and update parameters with gradient descent.
+
+### Going from `torch_slp_digits.py` to `torch_slp_autograd.py`
+
+Moving from [torch_slp_digits.py](torch_slp_digits.py) to [torch_slp_autograd.py](torch_slp_autograd.py), the main change is using PyTorch autograd instead of manually calculating gradients and manually applying parameter updates.
+
+In the manual version, gradient expressions and update steps are written explicitly. In the autograd version, PyTorch builds the computation graph during the forward pass and computes gradients automatically during backpropagation.
+
+The model objective and overall training structure remain similar, but the autograd version is shorter, less error-prone, and easier to extend.
+
+### Going from `torch_slp_autograd.py` to `torch_mlp_autograd.py`
+
+Moving from [torch_slp_autograd.py](torch_slp_autograd.py) to [torch_mlp_autograd.py](torch_mlp_autograd.py), the key architectural change is adding a second layer (a hidden layer) to form an MLP instead of a single linear layer.
+
+Parameter updates are also applied in a loop over all learnable tensors, for example:
+
+```python
+for p in params:
+	p -= lr * p.grad
+	p.grad.zero_()
+```
+
+This avoids updating each parameter one at a time manually and keeps the training step concise. A similar loop-style parameter update pattern is also visible in [np_mlp_digits.py](np_mlp_digits.py).
+
+### Going from `torch_mlp_autograd.py` to `torch_mlp_sequential.py`
+
+Moving from [torch_mlp_autograd.py](torch_mlp_autograd.py) to [torch_mlp_sequential.py](torch_mlp_sequential.py), the main change is replacing manual parameter declarations (`W1`, `b1`, `W2`, `b2`) with layer modules such as `nn.Linear`.
+
+Instead of explicitly managing each weight and bias tensor, the Sequential version defines the network architecture declaratively, with PyTorch handling parameter registration for each layer.
+
+The training goal remains the same, but the model definition becomes cleaner and more idiomatic for larger PyTorch projects.
 
 ## Network Architectures
 
