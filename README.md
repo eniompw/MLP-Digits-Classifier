@@ -1,8 +1,8 @@
 # MLP Digits Classifier — NumPy and PyTorch
 
-A hands-on introduction to neural networks built from scratch — covering both a **Single-Layer Perceptron (SLP)** and a **Multi-Layer Perceptron (MLP)** implemented in NumPy and PyTorch, trained to classify handwritten digits (0–9) using scikit-learn's built-in `digits` dataset (1797 samples of 8×8 images).
+Builds a digits classifier step by step — starting from a single linear layer in pure NumPy, adding a hidden ReLU layer, then porting the same ideas to PyTorch with progressively higher-level abstractions (manual gradients → autograd → `nn.Sequential`).
 
-Includes NumPy scratch implementations, equivalent PyTorch versions (manual gradients and autograd), and step-by-step explainers.
+Uses scikit-learn's built-in `digits` dataset (1797 samples of 8×8 handwritten digits, 0–9). Each step includes a Python script, and the NumPy versions also have a Jupyter Notebook and a line-by-line explainer.
 
 ## Contents
 
