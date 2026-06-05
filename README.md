@@ -6,6 +6,8 @@ Includes NumPy scratch implementations, equivalent PyTorch versions (manual grad
 
 > Follows on from [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent), extending gradient descent from a single-output linear model to a multi-class neural network.
 >
+> The [np_slp_digits.py](np_slp_digits.py) implementation builds directly on [linreg_ames.py](https://github.com/eniompw/LinearRegressionGD/blob/main/linreg_ames.py), extending the same gradient descent framework from continuous targets in linear regression to categorical targets in multi-class classification.
+>
 > This series continues with [TinyLM](https://github.com/eniompw/TinyLM), where the SLP and MLP are applied to text.
 
 ## Contents
