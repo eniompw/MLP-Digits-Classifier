@@ -14,7 +14,7 @@ Jupyter notebooks mirror the NumPy scripts for an interactive, pedagogical versi
 
 ## 1. NumPy SLP: `np_slp_digits.py`
 
-**Goal:** Show that a single linear layer with softmax is enough to get a decent classifier on `sklearn`’s digits dataset, implemented from scratch with full-batch gradient descent.
+**Goal:** Show that a single linear layer with softmax is enough to get a decent classifier on `sklearn`'s digits dataset, implemented from scratch with full-batch gradient descent.
 
 Key components:
 
@@ -25,7 +25,7 @@ Key components:
     ```python
     X = (X - X.mean()) / (X.std())
     ```  
-    This treats all 64 pixels as one feature distribution; later code refines this to per-feature normalization.
+    This treats all 64 pixels as one feature distribution. Note: this is a simplification — it applies a single mean and std across all pixels. The MLP (step 2) refines this to per-feature normalization, which better conditions the optimization.
   - One-hot encode labels with `np.eye(10)[y]` to get `y_one_hot` of shape `(1797, 10)`.
 
 - **Model definition**
@@ -43,10 +43,10 @@ Key components:
     W -= learning_rate * X.T @ dlogits
     b -= learning_rate * dlogits.sum(0, keepdims=True)
     ```  
-    This shows the “softmax + CE → probs − one_hot” simplification explicitly.
+    This shows the "softmax + CE → probs − one_hot" simplification explicitly.
   - Accuracy is printed every 100 epochs using `probs.argmax(1)` vs `y`.
 
-**Pedagogical move:** This file establishes the full training loop (forward, loss gradient, backward, update) in the simplest possible setting: a single linear map. Students see that nothing “magical” is required beyond linear algebra and the softmax trick.
+**Pedagogical move:** This file establishes the full training loop (forward, loss gradient, backward, update) in the simplest possible setting: a single linear map. Students see that nothing "magical" is required beyond linear algebra and the softmax trick.
 
 ---
 
@@ -62,7 +62,7 @@ What changes relative to `np_slp_digits.py`?
     ```python
     return (x - x.mean(axis=0)) / (x.std(axis=0) + 1e-8)
     ```  
-    This better conditions the optimization, especially when features have different scales.
+    This better conditions the optimization, especially when features have different scales. The `1e-8` epsilon prevents division by zero on constant pixels.
 
 - **Network architecture: 64 → 32 → 10**
 
@@ -80,7 +80,7 @@ What changes relative to `np_slp_digits.py`?
         probs = softmax(layer1 @ W2 + b2)
         return layer1, probs
     ```  
-    This introduces the idea of modular forward passes that will map naturally to PyTorch’s `forward` methods.
+    This introduces the idea of modular forward passes that will map naturally to PyTorch's `forward` methods.
 
 - **Backprop through ReLU and two layers**
 
@@ -101,13 +101,13 @@ What changes relative to `np_slp_digits.py`?
     b1 -= learning_rate * layer1_error.sum(0, keepdims=True)
     ```
 
-**Pedagogical move:** This file introduces genuine backprop in a way that mirrors the matrix calculus in textbooks: one hidden layer, explicit derivatives, and clear separation between forward and backward. It sets students up to appreciate PyTorch’s autograd as an automation of what they just did manually.
+**Pedagogical move:** This file introduces genuine backprop in a way that mirrors the matrix calculus in textbooks: one hidden layer, explicit derivatives, and clear separation between forward and backward. It sets students up to appreciate PyTorch's autograd as an automation of what they just did manually.
 
 ---
 
 ## 3. PyTorch SLP: `torch_slp_digits.py`
 
-**Goal:** Rebuild the same single-layer classifier, but now with PyTorch tensors, a classifier loop that looks nearly identical, and manual `.backward()` + `torch.no_grad()` updates.
+**Goal:** Rebuild the same single-layer classifier, but now with PyTorch tensors, a training loop that looks nearly identical to the NumPy version, and manual `.backward()` + `torch.no_grad()` updates.
 
 Typical elements:
 
@@ -118,7 +118,7 @@ Typical elements:
 
 - **Model**
 
-  - Either explicit weight + bias tensors, or a simple `nn.Linear(64, 10)` module if you want to highlight `nn` early.  
+  - Explicit weight and bias tensors (`W` and `b`) with `requires_grad=True` — no `nn.Linear` or any `nn.Module` yet. This keeps a one-to-one correspondence with the NumPy version so students can compare directly.  
   - Softmax computed via `torch.softmax` or `logits.exp() / logits.exp().sum(dim=1, keepdim=True)` to match the NumPy implementation.
 
 - **Training loop**
@@ -135,7 +135,7 @@ Typical elements:
     ```
   - Accuracy logging similar to NumPy (`probs.argmax(dim=1)` vs `y`).
 
-**Pedagogical move:** This file is the bridge: same SLP as before, but now with PyTorch. Students see a one-to-one mapping from NumPy arrays to tensors, and from hand-coded grads to autograd-backed `.grad` fields.
+**Pedagogical move:** This file is the bridge: same SLP as before, but now with PyTorch. Students see a one-to-one mapping from NumPy arrays to tensors, and from hand-coded grads to autograd-backed `.grad` fields. The introduction of `nn.Module` is deliberately deferred to the next file.
 
 ---
 
@@ -161,7 +161,7 @@ Key shifts:
 
 - **Cleaner training loop**
 
-  - Loop is now “canonical PyTorch”: forward → loss → backward → optimizer step, with accuracy and loss logging.
+  - Loop is now "canonical PyTorch": forward → loss → backward → optimizer step, with accuracy and loss logging.
 
 **Pedagogical move:** This file shows that once autograd and `nn.Module` are in play, the training loop simplifies and uses standard building blocks, while still being conceptually the same as the NumPy gradient descent.
 
@@ -185,6 +185,13 @@ Key shifts:
       x = self.fc2(x)
       return x
       ```
+    - Parameter updates are applied in a loop over all learnable tensors, avoiding per-parameter update lines:
+      ```python
+      for p in params:
+          p -= lr * p.grad
+          p.grad.zero_()
+      ```
+      This is a notable difference from `torch_slp_digits.py` where `W` and `b` were updated individually.
   - `torch_mlp_sequential.py`:  
     - Same architecture expressed as:
       ```python
@@ -198,9 +205,9 @@ Key shifts:
 
 - **Training**
 
-  - Training loop is identical to `torch_slp_autograd.py`, only with a deeper network and (likely) better performance.
+  - The overall training structure (forward → loss → backward → update) is the same as `torch_slp_autograd.py`, only with a deeper network and (likely) better performance.
 
-**Pedagogical move:** Students see that the conceptual jump from “one layer + softmax” to “MLP” is small once they are in PyTorch, and that there are multiple equivalent ways to express the same computation graph.
+**Pedagogical move:** Students see that the conceptual jump from "one layer + softmax" to "MLP" is small once they are in PyTorch, and that there are multiple equivalent ways to express the same computation graph.
 
 ---
 
@@ -213,7 +220,8 @@ Two explainer markdowns back up the code:
 
 Notebooks:
 
-- `np_slp_digits.ipynb` and `np_mlp_digits.ipynb` replicate the scripts in a cell-based, interactive format, useful for visualizing intermediate quantities or making small experimental changes (e.g., different hidden sizes, learning rates).
+- `np_slp_digits.ipynb`: interactive, cell-based version of the NumPy SLP script, useful for stepping through the data pipeline, visualizing digit samples, and experimenting with the training loop.  
+- `np_mlp_digits.ipynb`: replicates the NumPy MLP script in notebook format, useful for visualizing intermediate quantities or making small experimental changes (e.g., different hidden sizes, learning rates).
 
 ---
 
