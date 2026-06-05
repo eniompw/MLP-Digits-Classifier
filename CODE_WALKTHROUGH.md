@@ -12,6 +12,19 @@ Jupyter notebooks mirror the NumPy scripts for an interactive, pedagogical versi
 
 ---
 
+## Contents
+
+- [What Changes at Each Step](#what-changes-at-each-step)
+- [1. NumPy SLP: `np_slp_digits.py`](#1-numpy-slp-np_slp_digitspy)
+- [2. NumPy MLP: `np_mlp_digits.py`](#2-numpy-mlp-np_mlp_digitspy)
+- [3. PyTorch SLP: `torch_slp_digits.py`](#3-pytorch-slp-torch_slp_digitspy)
+- [4. PyTorch SLP with Autograd Abstractions: `torch_slp_autograd.py`](#4-pytorch-slp-with-autograd-abstractions-torch_slp_autogradpy)
+- [5. PyTorch MLP: `torch_mlp_autograd.py` and `torch_mlp_sequential.py`](#5-pytorch-mlp-torch_mlp_autogradpy-and-torch_mlp_sequentialpy)
+- [6. Explainer Docs and Notebooks](#6-explainer-docs-and-notebooks)
+- [How the Ideas Evolve](#how-the-ideas-evolve)
+
+---
+
 ## What Changes at Each Step
 
 ### `np_slp_digits.py` → `np_mlp_digits.py`
