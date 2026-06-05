@@ -23,17 +23,17 @@ Includes NumPy scratch implementations, equivalent PyTorch versions (manual grad
 
 | File | Description |
 |------|-------------|
-| `np_slp_digits.py` | NumPy single-layer (no hidden layer) softmax classifier |
-| `np_slp_digits.ipynb` | Jupyter Notebook version of the single-layer classifier |
-| `np_slp_digits_explainer.md` | Step-by-step explainer for the NumPy single-layer classifier |
-| `torch_slp_digits.py` | PyTorch single-layer softmax classifier with manual gradient updates |
-| `torch_slp_autograd.py` | PyTorch single-layer classifier using builtin softmax and autograd |
-| `torch_slp_digits_explainer.md` | Step-by-step explainer for the PyTorch single-layer classifier |
-| `np_mlp_digits.py` | NumPy MLP — clean Python script with full training loop |
-| `np_mlp_digits.ipynb` | Jupyter Notebook version with cell-by-cell walkthrough |
-| `torch_mlp_autograd.py` | PyTorch MLP classifier using autograd |
-| `torch_mlp_sequential.py` | PyTorch MLP classifier using `nn.Sequential` |
-| `CODE_WALKTHROUGH.md` | Detailed code walkthrough covering all implementations |
+| [np_slp_digits.py](np_slp_digits.py) | NumPy single-layer (no hidden layer) softmax classifier |
+| [np_slp_digits.ipynb](np_slp_digits.ipynb) | Jupyter Notebook version of the single-layer classifier |
+| [np_slp_digits_explainer.md](np_slp_digits_explainer.md) | Step-by-step explainer for the NumPy single-layer classifier |
+| [torch_slp_digits.py](torch_slp_digits.py) | PyTorch single-layer softmax classifier with manual gradient updates |
+| [torch_slp_autograd.py](torch_slp_autograd.py) | PyTorch single-layer classifier using builtin softmax and autograd |
+| [torch_slp_digits_explainer.md](torch_slp_digits_explainer.md) | Step-by-step explainer for the PyTorch single-layer classifier |
+| [np_mlp_digits.py](np_mlp_digits.py) | NumPy MLP — clean Python script with full training loop |
+| [np_mlp_digits.ipynb](np_mlp_digits.ipynb) | Jupyter Notebook version with cell-by-cell walkthrough |
+| [torch_mlp_autograd.py](torch_mlp_autograd.py) | PyTorch MLP classifier using autograd |
+| [torch_mlp_sequential.py](torch_mlp_sequential.py) | PyTorch MLP classifier using `nn.Sequential` |
+| [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) | Detailed code walkthrough covering all implementations |
 
 ## Network Architectures
 
