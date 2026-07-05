@@ -1,166 +1,124 @@
-# MLP Digits Classifier — NumPy and PyTorch
+# MLP Digits Classifier — NumPy & PyTorch
 
-Builds a digits classifier step by step — starting from a single linear layer in pure NumPy, adding a hidden ReLU layer, then porting the same ideas to PyTorch with progressively higher-level abstractions (manual gradients → autograd → `nn.Sequential`).
+![Python](https://img.shields.io/badge/Python-3.8+-blue?logo=python)
+![License](https://img.shields.io/badge/License-MIT-green)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/eniompw/MLP-Digits-Classifier/blob/main/np_mlp_digits.ipynb)
 
-Uses scikit-learn's built-in `digits` dataset (1797 samples of 8×8 handwritten digits, 0–9). Each step includes a Python script, and the NumPy versions also have a Jupyter Notebook and a line-by-line explainer.
+## What This Repo Is
 
-## Related Repos
+This is the **middle step** in a three-part series that builds up to a language model from first principles:
 
-> Part of a series: [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent) → **MLP Digits Classifier** → [TinyLM](https://github.com/eniompw/TinyLM)
->
-> Follows on from [LinearRegressionGradientDescent](https://github.com/eniompw/LinearRegressionGradientDescent), extending gradient descent from a single-output linear model to a multi-class neural network. The [np_slp_digits.py](np_slp_digits.py) implementation builds directly on [linreg_ames.py](https://github.com/eniompw/LinearRegressionGD/blob/main/linreg_ames.py), extending the same gradient descent framework from continuous targets in linear regression to categorical targets in multi-class classification.
->
-> This series continues with [TinyLM](https://github.com/eniompw/TinyLM), where the SLP and MLP are applied to text.
+| Repo | What you learn | Core concept |
+|------|----------------|--------------|
+| [LinearRegressionGD](https://github.com/eniompw/LinearRegressionGD) | Predict a single number | 1 neuron, MSE loss, gradient descent |
+| **MLP-Digits-Classifier** ← you are here | Classify 10 digit classes | Hidden layer, ReLU, softmax, cross-entropy |
+| [TinyLM](https://github.com/eniompw/TinyLM) | Generate text | Same MLP applied to character sequences |
 
-## Contents
+The series is deliberately incremental: every new concept introduced here builds directly on the previous repo. `np_slp_digits.py` is a direct extension of [`linreg_ames.py`](https://github.com/eniompw/LinearRegressionGD/blob/main/linreg_ames.py) — the same gradient descent loop, now with softmax instead of MSE and 10 outputs instead of 1. The MLP then adds a hidden ReLU layer, which is the exact same architecture used in [`NameSLP.py`](https://github.com/eniompw/TinyLM/blob/main/NameSLP.py) and [`TinyMLP.py`](https://github.com/eniompw/TinyLM/blob/main/TinyMLP.py) in TinyLM.
 
-- [Files](#files)
-- [Network Architectures](#network-architectures)
-- [How the MLP Works](#how-the-mlp-works)
-- [Key Implementation Details](#key-implementation-details)
-- [Hyperparameters](#hyperparameters)
-- [Usage](#usage)
-- [Requirements](#requirements)
-- [License](#license)
+By the end of this repo you will have built the same core network — in pure NumPy and in PyTorch — that powers the first two levels of TinyLM.
 
-## Files
+| | LinearRegressionGD | MLP-Digits-Classifier | TinyLM |
+|---|---|---|---|
+| **Architecture** | 1 neuron | SLP → MLP (images) | MLP → Transformer (text) |
+| **Loss** | MSE loss | cross-entropy loss | cross-entropy loss |
+| **Stack** | NumPy only | NumPy → PyTorch | NumPy → CuPy → PyTorch |
 
-Start with `np_slp_digits.py` and follow the progression below.
+---
 
-**NumPy SLP — baseline**
+## Architecture
 
-| File | Description |
-|------|-------------|
-| [np_slp_digits.py](np_slp_digits.py) | NumPy single-layer (no hidden layer) softmax classifier |
-| [np_slp_digits.ipynb](np_slp_digits.ipynb) | Jupyter Notebook version of the single-layer classifier |
-| [np_slp_digits_explainer.md](np_slp_digits_explainer.md) | Step-by-step explainer for the NumPy single-layer classifier |
+SLP: Input (64) → Softmax (10)
+MLP: Input (64) → ReLU (32) → Softmax (10)
 
-**NumPy MLP — adds a hidden layer**
 
-| File | Description |
-|------|-------------|
-| [np_mlp_digits.py](np_mlp_digits.py) | NumPy MLP — clean Python script with full training loop |
-| [np_mlp_digits.ipynb](np_mlp_digits.ipynb) | Jupyter Notebook version with cell-by-cell walkthrough |
+The MLP reaches **99% accuracy** on scikit-learn's `digits` dataset (1797 samples, 8×8 handwritten digits 0–9). The SLP plateaus at 98%.
 
-**PyTorch SLP — bridge to PyTorch**
+---
+
+## Learning Path
+
+Start with `np_slp_digits.py` and follow the progression:
+
+**NumPy — baseline**
 
 | File | Description |
 |------|-------------|
-| [torch_slp_digits.py](torch_slp_digits.py) | PyTorch single-layer softmax classifier with manual gradient updates |
-| [torch_slp_autograd.py](torch_slp_autograd.py) | PyTorch single-layer classifier using built-in softmax and autograd |
-| [torch_slp_digits_explainer.md](torch_slp_digits_explainer.md) | Step-by-step explainer for the PyTorch single-layer classifier |
+| [np_slp_digits.py](np_slp_digits.py) | Single-layer softmax classifier |
+| [np_slp_digits.ipynb](np_slp_digits.ipynb) | Notebook version |
+| [np_slp_digits_explainer.md](np_slp_digits_explainer.md) | Line-by-line explainer |
 
-**PyTorch MLP — destination**
-
-| File | Description |
-|------|-------------|
-| [torch_mlp_autograd.py](torch_mlp_autograd.py) | PyTorch MLP classifier using autograd |
-| [torch_mlp_sequential.py](torch_mlp_sequential.py) | PyTorch MLP classifier using `nn.Sequential` |
-
-**Docs**
+**NumPy — adds hidden layer**
 
 | File | Description |
 |------|-------------|
-| [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) | Detailed code walkthrough covering all implementations and what changes at each step |
+| [np_mlp_digits.py](np_mlp_digits.py) | MLP with full training loop |
+| [np_mlp_digits.ipynb](np_mlp_digits.ipynb) [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/eniompw/MLP-Digits-Classifier/blob/main/np_mlp_digits.ipynb) | Notebook with cell-by-cell walkthrough |
 
-## Network Architectures
+**PyTorch — bridge**
 
-### Single-Layer Perceptron (SLP)
+| File | Description |
+|------|-------------|
+| [torch_slp_digits.py](torch_slp_digits.py) | Manual gradient updates |
+| [torch_slp_autograd.py](torch_slp_autograd.py) | Built-in autograd |
+| [torch_slp_digits_explainer.md](torch_slp_digits_explainer.md) | Step-by-step explainer |
 
-A minimal baseline — one linear mapping from pixels to class logits. See `np_slp_digits.py`.
+**PyTorch — destination**
 
-```
-Input (64)  →  Output Softmax (10)
-```
+| File | Description |
+|------|-------------|
+| [torch_mlp_autograd.py](torch_mlp_autograd.py) | MLP with autograd |
+| [torch_mlp_sequential.py](torch_mlp_sequential.py) | MLP with `nn.Sequential` |
+| [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) | Full walkthrough across all files |
 
-| Layer  | Size                    | Activation |
-|--------|-------------------------|------------|
-| Input  | 64 (8×8 pixel values)   | —          |
-| Output | 10 neurons (digits 0–9) | Softmax    |
-
-### Multi-Layer Perceptron (MLP)
-
-Adds a hidden ReLU layer, enabling the network to learn non-linear features.
-
-```
-Input (64)  →  Hidden ReLU (32)  →  Output Softmax (10)
-```
-
-| Layer  | Size                    | Activation |
-|--------|-------------------------|------------|
-| Input  | 64 (8×8 pixel values)   | —          |
-| Hidden | 32 neurons              | ReLU       |
-| Output | 10 neurons (digits 0–9) | Softmax    |
+---
 
 ## How the MLP Works
 
-The steps below describe `np_mlp_digits.py`; the SLP omits steps 3 and 4 (no hidden layer or ReLU gate).
+Steps describe `np_mlp_digits.py`; the SLP skips steps 3–4.
 
-1. **Data** — Loads `sklearn.datasets.load_digits` (1797 samples, 64 features each); applies per-feature z-score standardisation (`mean=0, std=1`) with a small epsilon to avoid division by zero on constant pixels.
-2. **One-hot encoding** — Converts integer labels to a `(1797, 10)` target matrix via `np.eye(10)[y]`.
-3. **Forward pass** — Computes ReLU activations in the hidden layer, then numerically stable softmax probabilities at the output.
-4. **Backward pass** — Uses the combined cross-entropy + softmax gradient `(predictions - targets) / N`, then propagates through the ReLU gate using a binary mask (`layer1 > 0`).
-5. **Update** — Applies full-batch gradient descent for 1000 epochs, printing accuracy every 100 epochs.
+1. **Data** — `load_digits` (1797 × 64); z-score standardisation per feature
+2. **One-hot** — `np.eye(10)[y]` → `(1797, 10)` target matrix
+3. **Forward** — ReLU hidden activations, then numerically stable softmax
+4. **Backward** — Combined CE+softmax gradient `(probs - targets) / N`; ReLU gate via `layer1 > 0` mask
+5. **Update** — Full-batch gradient descent, 1000 epochs
 
-## Key Implementation Details
+## Key Details
 
 | Detail | Description |
 |--------|-------------|
-| Numerically stable softmax | Subtracts per-row max before `exp` to prevent overflow |
-| Combined CE + softmax gradient | `(probs - targets) / N` — avoids computing loss explicitly |
-| ReLU gate | `layer1 > 0` binary mask zeros gradients for inactive units |
-| Weight initialisation | `randn * 0.1` — small random weights; biases initialised to zero |
+| Stable softmax | Subtracts row-max before `exp` |
+| CE + softmax gradient | `(probs - targets) / N` — no explicit loss needed |
+| ReLU gate | Binary mask `layer1 > 0` zeros inactive gradients |
+| Weight init | `randn * 0.1`; biases = 0 |
 | Reproducibility | `np.random.seed(42)` |
+| Hyperparameters | lr=0.1, epochs=1000, hidden=32, full-batch |
 
-## Hyperparameters
+---
 
-| Parameter | Value |
-|-----------|-------|
-| Learning rate | 0.1 |
-| Epochs | 1000 |
-| Batch size | Full batch (1797 samples) |
-| Hidden units | 32 |
+## Results
 
-## Usage
+| Epoch | SLP | MLP |
+|-------|-----|-----|
+| 0     | 13% | 10% |
+| 100   | 94% | 72% |
+| 300   | 97% | 94% |
+| 600   | 98% | 98% |
+| 800   | 98% | 99% |
 
-Start with `np_slp_digits.py` and follow the progression below:
+---
+
+## Usage & Requirements
 
 ```bash
+pip install numpy scikit-learn torch
+
 python np_slp_digits.py          # single-layer (NumPy)
 python np_mlp_digits.py          # multi-layer (NumPy)
 python torch_slp_digits.py       # single-layer (PyTorch, manual gradients)
 python torch_slp_autograd.py     # single-layer (PyTorch, autograd)
 python torch_mlp_autograd.py     # multi-layer (PyTorch, autograd)
 python torch_mlp_sequential.py   # multi-layer (PyTorch, nn.Sequential)
-```
-
-The MLP converges more slowly early on but overtakes the SLP, reaching 99% accuracy by epoch 800. The SLP plateaus at 98%.
-
-| Epoch | SLP (`np_slp_digits.py`) | MLP (`np_mlp_digits.py`) |
-|-------|--------------------------|--------------------------|
-| 0     | 13%                      | 10%                      |
-| 100   | 94%                      | 72%                      |
-| 200   | 96%                      | 88%                      |
-| 300   | 97%                      | 94%                      |
-| 400   | 97%                      | 96%                      |
-| 500   | 98%                      | 97%                      |
-| 600   | 98%                      | 98%                      |
-| 700   | 98%                      | 98%                      |
-| 800   | 98%                      | 99%                      |
-| 900   | 98%                      | 99%                      |
-
-## Requirements
-
-```
-numpy
-scikit-learn
-torch
-```
-
-Install with:
-
-```bash
-pip install numpy scikit-learn torch
 ```
 
 ## License
